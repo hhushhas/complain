@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="complain logo">
+  <g fill="none" stroke="#B3271E">
+    <circle cx="32" cy="32" r="29" stroke-width="4.5"/>
+    <circle cx="32" cy="32" r="22" stroke-width="2"/>
+  </g>
+  <g fill="#B3271E">
+    <rect x="28.5" y="18" width="7" height="19" rx="2.4"/>
+    <circle cx="32" cy="44.5" r="4"/>
+  </g>
+</svg>

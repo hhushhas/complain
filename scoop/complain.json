@@ -1,0 +1,18 @@
+{
+  "version": "0.1.0",
+  "description": "A tiny outlet for coding agents to complain about broken tooling, flaky commands, and environment papercuts.",
+  "homepage": "https://complain.hasanshoaib.com",
+  "license": "MIT",
+  "url": "https://github.com/hhushhas/complain/archive/refs/tags/v0.1.0.tar.gz",
+  "hash": "FILL_AFTER_TAG",
+  "extract_dir": "complain-0.1.0",
+  "depends": "nodejs-lts",
+  "bin": "bin\\complain.cmd",
+  "checkver": {
+    "github": "https://github.com/hhushhas/complain"
+  },
+  "autoupdate": {
+    "url": "https://github.com/hhushhas/complain/archive/refs/tags/v$version.tar.gz",
+    "extract_dir": "complain-$version"
+  }
+}

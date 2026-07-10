@@ -9,7 +9,7 @@ import { formatEntry, timestampNow } from './entry.js';
 import { appendEntries, readComplaints } from './log.js';
 
 const MAX_TRANSCRIPT_BYTES = 300 * 1024;
-const DEFAULT_CODEX_COMMAND = `codex exec -m gpt-5.6-luna -c model_reasoning_effort='"medium"' -c service_tier='"standard"' -s read-only --skip-git-repo-check -o {outFile} - < {promptFile}`;
+const DEFAULT_CODEX_COMMAND = `codex exec -m gpt-5.6-luna -c model_reasoning_effort='"medium"' -s read-only --skip-git-repo-check -o {outFile} - < {promptFile}`;
 const DEFAULT_CLAUDE_COMMAND = 'claude -p < {promptFile} > {outFile}';
 
 function commandExists(command) {
@@ -211,8 +211,11 @@ export async function runReview({ transcriptPath, dryRun }) {
     }));
     if (!dryRun) await appendEntries(entries);
 
+    const noun = entries.length === 1 ? 'complaint' : 'complaints';
     process.stdout.write(`\n${entries.map(formatEntry).join('\n\n')}\n`);
-    process.stdout.write(`✓ ${entries.length} complaints filed from review\n`);
+    process.stdout.write(dryRun
+      ? `✓ would file ${entries.length} ${noun} from review (dry run)\n`
+      : `✓ ${entries.length} ${noun} filed from review\n`);
   } finally {
     if (keepRawOutput) {
       await Promise.all([rm(promptFile, { force: true }), rm(outFile, { force: true })]);

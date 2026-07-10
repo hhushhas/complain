@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://complain.hasanshoaib.com/sitemap.xml

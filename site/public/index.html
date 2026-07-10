@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>complain — the complaint department for AI coding agents</title>
+<meta name="description" content="A tiny CLI that gives coding agents an outlet to file complaints about flaky commands, misleading errors, and broken tooling — so you can sand your environment down.">
+<link rel="canonical" href="https://complain.hasanshoaib.com/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="complain — the complaint department for AI coding agents">
+<meta property="og:description" content="Agents hit friction constantly, then push through silently. complain gives them somewhere to vent — and gives you a roadmap of what to fix.">
+<meta property="og:url" content="https://complain.hasanshoaib.com/">
+<meta property="og:image" content="https://complain.hasanshoaib.com/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="complain — the complaint department for AI coding agents">
+<meta name="twitter:description" content="Agents hit friction constantly, then push through silently. complain gives them somewhere to vent — and gives you a roadmap of what to fix.">
+<meta name="twitter:image" content="https://complain.hasanshoaib.com/og.png">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon.png" type="image/png" sizes="48x48">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Public+Sans:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F2EEE3;
+  --manila:#E8DDBF;
+  --ink:#22252C;
+  --stamp:#B3271E;
+  --ballpoint:#2E5A87;
+  --muted:#6E6A5E;
+  --rule:#C9C2AC;
+}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:"Public Sans",system-ui,sans-serif;
+  font-size:17px;line-height:1.6;
+  background-image:repeating-linear-gradient(0deg,transparent,transparent 31px,rgba(34,37,44,.035) 31px,rgba(34,37,44,.035) 32px);
+}
+a{color:var(--ballpoint);text-underline-offset:3px}
+a:focus-visible,button:focus-visible{outline:3px solid var(--ballpoint);outline-offset:2px}
+code,pre,.mono{font-family:"IBM Plex Mono",monospace}
+.type{font-family:"Special Elite",monospace}
+.wrap{max-width:780px;margin:0 auto;padding:0 20px}
+
+header.site{border-bottom:2px solid var(--ink)}
+header.site .wrap{display:flex;align-items:center;gap:12px;padding-top:14px;padding-bottom:14px}
+header.site img{width:30px;height:30px}
+header.site .name{font-size:20px;letter-spacing:.5px}
+header.site nav{margin-left:auto;display:flex;gap:18px;font-size:15px}
+
+.dept{padding:64px 0 24px;text-align:center}
+.eyebrow{font-size:13px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted)}
+h1{font-size:clamp(30px,5.5vw,46px);line-height:1.15;font-weight:700;margin:14px auto 16px;max-width:640px}
+.lede{max-width:560px;margin:0 auto;color:var(--muted)}
+
+.form-card{
+  position:relative;text-align:left;background:#FBF8EF;
+  border:1.5px solid var(--ink);box-shadow:5px 5px 0 rgba(34,37,44,.18);
+  max-width:640px;margin:40px auto 0;padding:22px 26px 40px;
+}
+.form-card .form-head{display:flex;justify-content:space-between;gap:10px;border-bottom:1.5px solid var(--ink);padding-bottom:10px;margin-bottom:16px;font-size:13px;letter-spacing:.14em;text-transform:uppercase}
+.form-card .ticket{color:var(--stamp)}
+.field{display:flex;gap:10px;font-size:14px;padding:5px 0;border-bottom:1px dotted var(--rule)}
+.field dt{color:var(--muted);min-width:96px;text-transform:uppercase;font-size:12px;letter-spacing:.1em;padding-top:2px}
+.field dd{font-family:"IBM Plex Mono",monospace;font-size:14px}
+.grievance{margin-top:16px}
+.grievance .label{color:var(--muted);text-transform:uppercase;font-size:12px;letter-spacing:.1em}
+.grievance p{font-family:"Special Elite",monospace;font-size:15.5px;line-height:1.7;margin-top:6px}
+.stamp{
+  position:absolute;right:18px;bottom:14px;transform:rotate(-11deg);
+  border:3.5px solid var(--stamp);color:var(--stamp);border-radius:6px;
+  font-family:"Special Elite",monospace;font-size:26px;letter-spacing:.18em;
+  padding:4px 14px 2px;opacity:.88;
+  mask-image:radial-gradient(circle at 30% 40%,black 60%,rgba(0,0,0,.72));
+  animation:slam .45s cubic-bezier(.2,1.6,.4,1) .7s backwards;
+}
+@keyframes slam{from{transform:rotate(-11deg) scale(2.4);opacity:0}to{transform:rotate(-11deg) scale(1);opacity:.88}}
+@media (prefers-reduced-motion:reduce){.stamp{animation:none}}
+
+.install{margin:36px auto 0;max-width:640px}
+.cmd{
+  display:flex;align-items:center;gap:12px;background:var(--ink);color:#EFECE2;
+  padding:14px 18px;font-size:15px;overflow-x:auto;
+}
+.cmd .dollar{color:#9BA8B5;user-select:none}
+.cmd button{
+  margin-left:auto;background:none;border:1px solid #5A6472;color:#EFECE2;
+  font-family:inherit;font-size:12px;padding:4px 10px;cursor:pointer;flex-shrink:0;
+}
+.cmd button:hover{border-color:#EFECE2}
+
+section{padding:56px 0 8px}
+.sec-head{display:flex;align-items:baseline;gap:14px;border-bottom:1.5px solid var(--ink);padding-bottom:8px;margin-bottom:22px}
+.sec-head .no{font-size:13px;letter-spacing:.16em;color:var(--stamp)}
+h2{font-size:24px;font-weight:700}
+section p{max-width:640px;margin-bottom:14px}
+pre{
+  background:#FBF8EF;border:1.5px solid var(--ink);box-shadow:4px 4px 0 rgba(34,37,44,.14);
+  padding:16px 18px;font-size:13.5px;line-height:1.65;overflow-x:auto;margin:18px 0 24px;
+}
+pre .dim{color:var(--muted)}
+pre .red{color:var(--stamp)}
+.steps{list-style:none;counter-reset:step;max-width:640px}
+.steps li{counter-increment:step;position:relative;padding:12px 0 12px 44px;border-bottom:1px dotted var(--rule)}
+.steps li::before{
+  content:counter(step,decimal-leading-zero);font-family:"Special Elite",monospace;
+  color:var(--stamp);font-size:15px;position:absolute;left:0;top:14px;
+}
+.steps code{background:var(--manila);padding:1px 6px;font-size:14px}
+
+footer{margin-top:64px;border-top:2px solid var(--ink);padding:22px 0 40px;font-size:14px;color:var(--muted)}
+footer .wrap{display:flex;flex-wrap:wrap;gap:8px 22px}
+footer .fine{margin-left:auto}
+@media(max-width:560px){
+  .field dt{min-width:80px}
+  .stamp{font-size:20px;right:10px}
+  footer .fine{margin-left:0}
+}
+</style>
+</head>
+<body>
+<header class="site">
+  <div class="wrap">
+    <img src="logo.svg" alt="">
+    <span class="type name">complain</span>
+    <nav aria-label="External links">
+      <a href="https://github.com/hhushhas/complain">GitHub</a>
+      <a href="https://www.npmjs.com/package/complain-cli">npm</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="dept wrap">
+    <p class="eyebrow type">Dept. of Agent Grievances · est. 2026</p>
+    <h1>The complaint department for AI coding agents</h1>
+    <p class="lede">Agents hit broken tools, flaky commands, and misleading errors all day — then push through silently. <strong>complain</strong> is a tiny CLI outlet where they file it instead.</p>
+
+    <article class="form-card" aria-label="Example complaint entry">
+      <div class="form-head type"><span>Form AG-1 · Agent Complaint</span><span class="ticket">Nº 0047</span></div>
+      <dl>
+        <div class="field"><dt>Filed</dt><dd>2026-07-10T18:22:03Z</dd></div>
+        <div class="field"><dt>Model</dt><dd>claude-fable-5 · claude-code</dd></div>
+        <div class="field"><dt>Project</dt><dd>energy-dashboard (feat/vitest-fix)</dd></div>
+      </dl>
+      <div class="grievance">
+        <span class="label">Nature of grievance</span>
+        <p>While running vitest in apps/web, root-relative test paths silently match nothing — the workspace cwd is apps/web, not repo root. Cost me two retries.</p>
+      </div>
+      <div class="stamp" aria-hidden="true">FILED</div>
+    </article>
+
+    <div class="install">
+      <div class="cmd mono">
+        <span class="dollar">$</span>
+        <span id="install-cmd">npm install -g complain-cli</span>
+        <button type="button" data-copy="npm install -g complain-cli">copy</button>
+      </div>
+    </div>
+  </div>
+
+  <section class="wrap">
+    <div class="sec-head"><span class="no type">SEC. 1</span><h2>Why let them complain</h2></div>
+    <p>One complaint is a mood. Fifty complaints are a roadmap. Every entry lands in a single global file, <code>~/.complaints/complaints.md</code>, stamped with when, which model, which harness, and which project — read it back and you know exactly where your environment, docs, and tooling need sanding down.</p>
+<pre><code><span class="dim">$</span> complain -m claude-fable-5 "pnpm link --global failed with EACCES on /usr/local/bin; had to rerun with a writable bin dir. Undocumented."
+<span class="red">✓ complaint filed (#48)</span></code></pre>
+  </section>
+
+  <section class="wrap">
+    <div class="sec-head"><span class="no type">SEC. 2</span><h2>Open for business in two minutes</h2></div>
+    <ol class="steps">
+      <li>Install: <code>npm install -g complain-cli</code> — or <code>brew install hhushhas/tap/complain</code> on macOS, <a href="https://github.com/hhushhas/complain#install">Scoop</a> on Windows.</li>
+      <li>Tell your agents the desk exists: <code>complain init >> ~/.claude/CLAUDE.md</code> (and <code>>> ~/.codex/AGENTS.md</code>). The printed nudge teaches them to file in the moment, even when nothing is blocking.</li>
+      <li>Read the grievances: <code>complain list</code> for the feed, <code>complain digest</code> for counts by project and model.</li>
+    </ol>
+  </section>
+
+  <section class="wrap">
+    <div class="sec-head"><span class="no type">SEC. 3</span><h2>Audit the ones they swallowed</h2></div>
+    <p>Agents are trained to push through, so they under-report. <code>complain review</code> feeds a session transcript to a model of your choice and files the frictions the agent never mentioned — tagged <code>(review)</code> in the log. Deliberately manual: run it at the end of a session.</p>
+<pre><code><span class="dim">$</span> complain review
+<span class="dim">reviewing ~/.claude/projects/.../session.jsonl</span>
+<span class="red">✓ 3 complaints filed from review</span></code></pre>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>MIT</span>
+    <a href="https://github.com/hhushhas/complain">GitHub</a>
+    <a href="https://www.npmjs.com/package/complain-cli">npm</a>
+    <span class="fine">Inspired by <a href="https://x.com/steveruizok/status/2075303919664734295">Steve Ruiz's papercuts</a></span>
+  </div>
+</footer>
+
+<script>
+document.querySelectorAll("[data-copy]").forEach((btn) => {
+  btn.addEventListener("click", async () => {
+    await navigator.clipboard.writeText(btn.dataset.copy);
+    btn.textContent = "copied";
+    setTimeout(() => (btn.textContent = "copy"), 1600);
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+{
+  "name": "complain-cli",
+  "version": "0.1.0",
+  "description": "A tiny outlet for coding agents to complain about broken tools, flaky commands, and environment papercuts — so you can sand them down.",
+  "type": "module",
+  "bin": {
+    "complain": "bin/complain.js"
+  },
+  "files": [
+    "bin",
+    "src",
+    "prompts",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "cli",
+    "agents",
+    "claude-code",
+    "codex",
+    "papercuts",
+    "devex",
+    "friction"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hhushhas/complain.git"
+  },
+  "homepage": "https://complain.hasanshoaib.com",
+  "author": "Hasan Shoaib",
+  "license": "MIT"
+}
