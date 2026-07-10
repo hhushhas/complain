@@ -4,7 +4,7 @@
   "homepage": "https://complain.hasanshoaib.com",
   "license": "MIT",
   "url": "https://github.com/hhushhas/complain/archive/refs/tags/v0.1.0.tar.gz",
-  "hash": "FILL_AFTER_TAG",
+  "hash": "a520d020ce2c64f902935996cee2e0e3abb5d1b099a28b29c22e202cba5f65a2",
   "extract_dir": "complain-0.1.0",
   "depends": "nodejs-lts",
   "bin": "bin\\complain.cmd",
